@@ -12,10 +12,18 @@ public class BaseTest {
 
     @BeforeEach
     public void setUp() {
-        ChromeOptions options = new ChromeOptions();
-        options.addArguments("--remote-allow-origins=*");
+        String browser = System.getProperty("browser", "chrome").toLowerCase();
 
-        driver = new ChromeDriver(options);
+        switch (browser) {
+            case "firefox":
+                driver = new org.openqa.selenium.firefox.FirefoxDriver();
+                break;
+            default:
+                ChromeOptions options = new ChromeOptions();
+                options.addArguments("--remote-allow-origins=*");
+                driver = new ChromeDriver(options);
+        }
+
         driver.manage().window().maximize();
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
         driver.get("https://www.saucedemo.com/");
